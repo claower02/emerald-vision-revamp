@@ -1,12 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const links = [
+  { href: "/catalog", label: "Каталог" },
+  { href: "/service", label: "Сервис" },
+  { href: "/galery", label: "Галерея" },
+  { href: "/content/partnerstvo", label: "Партнёры" },
+  { href: "/content/otzyvy", label: "Отзывы" },
+  { href: "/pay", label: "Оплата" },
+  { href: "/faq", label: "FAQ" },
+];
+
 export function SiteNav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -14,13 +25,6 @@ export function SiteNav() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const links = [
-    { href: "#about", label: "Компания" },
-    { href: "#catalog", label: "Каталог" },
-    { href: "#service", label: "Сервис" },
-    { href: "#contact", label: "Контакты" },
-  ];
 
   return (
     <header
@@ -41,39 +45,54 @@ export function SiteNav() {
           </div>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-6">
           {links.map((l) => (
-            <a key={l.href} href={l.href} className="text-sm font-mono uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors">
+            <Link
+              key={l.href}
+              to={l.href}
+              className={cn(
+                "text-xs font-mono uppercase tracking-wider transition-colors",
+                pathname === l.href ? "text-primary" : "text-muted-foreground hover:text-primary"
+              )}
+            >
               {l.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-3">
           <Button asChild variant="ghost" size="sm">
             <Link to="/auth">Вход</Link>
           </Button>
           <Button asChild variant="outline" size="sm">
-            <a href="#contact">Заявка</a>
+            <Link to="/#contact">Заявка</Link>
           </Button>
         </div>
 
-        <button className="md:hidden text-foreground" onClick={() => setOpen(!open)} aria-label="Меню">
+        <button className="lg:hidden text-foreground" onClick={() => setOpen(!open)} aria-label="Меню">
           {open ? <X /> : <Menu />}
         </button>
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-border bg-background/95 backdrop-blur">
+        <div className="lg:hidden border-t border-border bg-background/95 backdrop-blur">
           <div className="container py-4 flex flex-col gap-4">
             {links.map((l) => (
-              <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="font-mono uppercase tracking-wider text-sm text-muted-foreground hover:text-primary">
+              <Link
+                key={l.href}
+                to={l.href}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "font-mono uppercase tracking-wider text-sm transition-colors",
+                  pathname === l.href ? "text-primary" : "text-muted-foreground hover:text-primary"
+                )}
+              >
                 {l.label}
-              </a>
+              </Link>
             ))}
             <div className="flex gap-2 pt-2">
-              <Button asChild variant="ghost" size="sm" className="flex-1"><Link to="/auth">Вход</Link></Button>
-              <Button asChild variant="outline" size="sm" className="flex-1"><a href="#contact">Заявка</a></Button>
+              <Button asChild variant="ghost" size="sm" className="flex-1"><Link to="/auth" onClick={() => setOpen(false)}>Вход</Link></Button>
+              <Button asChild variant="outline" size="sm" className="flex-1"><Link to="/#contact" onClick={() => setOpen(false)}>Заявка</Link></Button>
             </div>
           </div>
         </div>
