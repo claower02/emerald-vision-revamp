@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
+import { useReveal } from "@/hooks/useReveal";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Минимум 2 символа").max(120),
@@ -52,11 +53,12 @@ export function Contact() {
     toast.success("Заявка принята! Мы свяжемся в течение часа.");
   };
 
+  const ref = useReveal<HTMLElement>();
   return (
-    <section id="contact" className="relative py-24 md:py-32 border-t border-border">
+    <section ref={ref} id="contact" className="relative py-24 md:py-32 border-t border-border">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
-          <div>
+          <div data-reveal="left">
             <div className="font-mono text-xs uppercase tracking-[0.3em] text-primary mb-4">// 04 / Контакт</div>
             <h2 className="text-4xl md:text-6xl font-bold mb-8 text-balance">
               Запустим <span className="neon-text">диалог</span>
@@ -89,7 +91,7 @@ export function Contact() {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative" data-reveal="right">
             <div className="corner-frame p-6 md:p-10 bg-card/60 backdrop-blur">
               {sent ? (
                 <div className="text-center py-12">
