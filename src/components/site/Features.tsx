@@ -1,4 +1,5 @@
 import { Shield, Coins, Award, Layers } from "lucide-react";
+import { useReveal } from "@/hooks/useReveal";
 
 const items = [
   { icon: Shield, n: "01", title: "15+ лет опыта", desc: "Безаварийная работа на крупнейших ГОКах Казахстана" },
